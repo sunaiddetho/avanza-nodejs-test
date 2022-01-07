@@ -1,0 +1,27 @@
+{
+  "name": "avanza-nodejs-test",
+  "version": "1.0.0",
+  "description": "Node App with Echo API",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "api-tests": "newman run tests/avanza-nodejs-test-get-test.postman_collection.json --reporters cli,junit --reporter-junit-export newman.xml",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunaiddetho/nodejs-test-unittest-declarative.git"
+  },
+  "author": "Sunaid Detho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunaiddetho/nodejs-test-unittest-declarative/issues"
+  },
+  "homepage": "https://github.com/sunaiddetho/nodejs-test-unittest-declarative#readme",
+  "dependencies": {
+    "express": "4.17.2",
+    "newman": "5.3.0"
+  }
+}
