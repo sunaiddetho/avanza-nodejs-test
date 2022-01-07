@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  tasks:
+    - name : Install Epel Repo.
+      yum:
+        name: epel-release
+        state: installed
+
+    - name: Install Nginx Server.
+      yum:
+        name: nginx
+        state: installed

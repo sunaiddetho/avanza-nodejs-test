@@ -1,0 +1,15 @@
+---
+  - name: Examples of lineinfile
+    hosts: localhost
+
+    tasks:
+      - name: "Example2: Add the line if it does not exist"
+        become: yes
+        become_user: root
+        tags: example2
+        lineinfile:
+          path: /etc/hosts
+          line: "172.17.0.2 avanza-nodejs-test"
+          state: present
+          backup: yes
+        register: example2out

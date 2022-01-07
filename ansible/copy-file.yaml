@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Copy Configuration File.
+      become: yes
+      copy:
+        src: ./nginx/avanza-nodejs-test.conf
+        dest: /etc/nginx/conf.d/
+        owner: nginx
+        group: nginx
+        mode: 0644
