@@ -1,6 +1,9 @@
 import groovy.json.JsonSlurper
 pipeline{
     agent any
+        environment {
+            email_list = 'sunaiddetho@gmail.com;bilal.mahroof@avanzainnovations.com'
+        }
         stages{
             stage('SCM Checkout') {
                 steps{
@@ -46,7 +49,7 @@ pipeline{
         post {
             success { 
                 emailext mimeType: 'text/html',
-                to: 'sunaiddetho@gmail.com,sunaiddetho@hotmail.com',
+                to: "${email_list}",
                 subject: "Build '${env.JOB_NAME}' Status: Successfull",
                 body: "<h2>BUILD STATUS: ${currentBuild.result}</h2>\
                 <table>\
@@ -59,7 +62,7 @@ pipeline{
             }
                 failure {
                     emailext mimeType: 'text/html',
-                    to: 'sunaiddetho@gmail.com,sunaiddetho@hotmail.com',
+                    to: "${email_list}",
                     subject: "Build '${env.JOB_NAME}' Status: Failure",
                     body: "<h2>BUILD STATUS: ${currentBuild.result}</h2>\
                         <table>\
