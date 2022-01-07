@@ -4,7 +4,7 @@ pipeline{
         stages{
             stage('SCM Checkout') {
                 steps{
-                    git branch: 'hotfix', credentialsId: 'GitHubCredentials', url: 'https://github.com/sunaiddetho/nodejs-test-unittest-declarative'
+                    git branch: 'hotfix', credentialsId: 'GitHubCredentials', url: 'https://github.com/sunaiddetho/avanza-nodejs-test'
                 }
             }
             stage('Deploy Docker') {
