@@ -2,37 +2,46 @@ import groovy.json.JsonSlurper
 pipeline{
     agent any
         stages{
-            stage('SCM Checkout'){
+            stage('SCM Checkout') {
                 steps{
                     git branch: 'hotfix', credentialsId: 'GitHubCredentials', url: 'https://github.com/sunaiddetho/nodejs-test-unittest-declarative'
-            }}
-            stage('Deploy Docker'){
+                }
+            }
+            stage('Deploy Docker') {
                 steps{
                     script{
                         sh "docker build -t sunaiddetho/nodejs-test:1.0.0 ."
                         sh "docker rm -f nodejs-test || true"
                         sh "docker run --restart always -p 8001:8001 -d --name nodejs-test --hostname avanza-nodejs-test sunaiddetho/nodejs-test:1.0.0"
                         sh 'sleep 10'
-            }}}
+                    }
+                }
+            }
             stage('Unit Test'){
                 steps {
                     script {
-                        def RES = httpRequest 'http://avanza-nodejs-test:8001'
+                        def res = httpRequest 'http://avanza-nodejs-test:8001'
 
-                    if ( "${RES}" == "Status: 200" ) {
-                        stage('Echo API Test'){
-                            
+                        if ( "${res}" == "Status: 200" ) {
+                            stage('Echo API Test') {
                                 script {
                                     def response = httpRequest 'http://avanza-nodejs-test:8001'
                                     // println('Status: '+response.status)
                                     // println('Response: '+response.content)
-                                
-                                if ( "${response}" == "Status: 200" ) {
-                                    stage('Trigger Ansible') {
-                                        ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/nginx-install.yaml'
-                                        // ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/copy-file.yaml'
-                                        // ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/modify-file.yaml'
-            }}}}}}}}  
+                                    
+                                    if ( "${response}" == "Status: 200" ) {
+                                        stage('Trigger Ansible') {
+                                            ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/nginx-install.yaml'
+                                            // ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/copy-file.yaml'
+                                            // ansiblePlaybook become: true, colorized: true, credentialsId: 'rootCredentials', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'ansible/modify-file.yaml'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }  
         }
         post {
             success { 
